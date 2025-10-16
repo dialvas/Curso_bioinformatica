@@ -117,9 +117,6 @@ fasta_cleaner
 #### No es muy util correr 14 veces el mismo codigo y para esto haremos un ciclo for 
 ##y corremos la funcion fasta_cleaner que creamos previamente
 
-for(i in 1:length(shrooms_lista)){
-  shrooms_lista[[i]] <- fasta_cleaner(shrooms_lista[[i]], parse = F)
-}
 
 shrooms_lista[[14]]
 
@@ -131,9 +128,7 @@ shrooms_vector
 
 
 ###
-for(i in 1:length(shrooms_vector)){
-  shrooms_vector[i] <- shrooms_lista[[i]]
-}
+
 
 shrooms_vector
 
@@ -196,12 +191,7 @@ class(shrooms_align) <- "AAMultipleAlignment"
 
 ### a continuacion graficamos el alineamiento y lo exportamos a pdf
 
-pdf("results/shrooms_align.pdf", width = 15, height = 15)
-ggmsa::ggmsa(shrooms_align,   # shrooms_align, NOT shrooms_align_seqinr
-             start = 2000, 
-             end = 2100) 
 
-dev.off()
 
 
 ###Si bien un MSA es una buena manera de examinar una secuencia, 
@@ -228,9 +218,6 @@ class(shrooms_dist)
 tree <- nj(shrooms_dist)
 
 #### plot tree
-pdf("results/arbol_filogenetico.pdf", width = 15, height = 15)
-plot.phylo(tree, main="Phylogenetic Tree", 
-           use.edge.length = T)
-dev.off()
+
 
 #source: https://brouwern.github.io/lbrb/worked-example-building-a-phylogeny-in-r.html
