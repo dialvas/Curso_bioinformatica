@@ -24,9 +24,9 @@ library(ape)
 shroom_family <- c("CAA78718" , "X. laevis Apx" ,         "Rana-xShroom1",
                   "NP_597713" , "H. sapiens APXL2" ,     "Humano-hShroom1",
                   "CAA58534" , "H. sapiens APXL",        "Humano-hShroom2",
-                  "ABD19518" , "M. musculus Apxl" ,      "Ratón-mShroom2",
-                  "AAF13269" , "M. musculus ShroomL" ,   "Ratón-mShroom3a",
-                  "AAF13270" , "M. musculus ShroomS" ,   "Ratón-mShroom3b",
+                  "ABD19518" , "M. musculus Apxl" ,      "Raton-mShroom2",
+                  "AAF13269" , "M. musculus ShroomL" ,   "Raton-mShroom3a",
+                  "AAF13270" , "M. musculus ShroomS" ,   "Raton-mShroom3b",
                   "NP_065910", "H. sapiens Shroom" ,     "Humano-hShroom3",
                   "ABD59319" , "X. laevis Shroom-like",  "Rana-xShroom3",
                   "NP_065768", "H. sapiens KIAA1202" ,   "Humano-hShroom4a",
@@ -62,7 +62,7 @@ shroom_family_df
 #### ahora vamos a descargar multiples secuencias de las proteinas previas
 shroom_family_df$accession
 
-### vamos a crear una función nueva para 
+### vamos a crear una funcion nueva para 
 ###descargar los datos de cada referencia de acceso
 entrez_fetch_list <- function(db, id, rettype){
   
@@ -85,19 +85,19 @@ entrez_fetch_list <- function(db, id, rettype){
 entrez_fetch_list
 
 
-####### Ahora corremos la función para que haga 
-####### la descarga de codigos fasta de manera cíclica y los guarde en una lista
+####### Ahora corremos la funcion para que haga 
+####### la descarga de codigos fasta de manera ciclica y los guarde en una lista
 ####### Este paso puede tardar un poco.
 
 shrooms_lista <- entrez_fetch_list(db = "protein", 
                                   id = shroom_family_df$accession, 
                                   rettype = "fasta")
 
-##### ¿como observo algún elemento de la lista de manera individual (secuencia FASTA)?
+##### ¿como observo algun elemento de la lista de manera individual (secuencia FASTA)?
 shrooms_lista[[14]]
 
 ### Ahora debemos limpiar las secuencias porque tienen "\n"
-##### para esto creamos la función fasta_cleaner
+##### para esto creamos la funcion fasta_cleaner
 fasta_cleaner <- function(fasta_object, parse = TRUE){
   
   fasta_object <- sub("^(>)(.*?)(\\n)(.*)(\\n\\n)","\\4",fasta_object)
@@ -113,9 +113,9 @@ fasta_cleaner <- function(fasta_object, parse = TRUE){
 }
 
 fasta_cleaner
-#####Debo hacer la misma limpieza de la sencia fasta pero como son 14 elementos FASTA 
-#### No es muy útil correr 14 veces el mismo código y para esto haremos un ciclo for 
-##y corremos la función fasta_cleaner que creamos previamente
+#####Debo hacer la misma limpieza de la sencuencia fasta pero como son 14 elementos FASTA 
+#### No es muy util correr 14 veces el mismo codigo y para esto haremos un ciclo for 
+##y corremos la funcion fasta_cleaner que creamos previamente
 
 for(i in 1:length(shrooms_lista)){
   shrooms_lista[[i]] <- fasta_cleaner(shrooms_lista[[i]], parse = F)
@@ -138,7 +138,7 @@ for(i in 1:length(shrooms_vector)){
 shrooms_vector
 
 ### Necesitamos poner nombre a los elementos del vector 
-###(esto para saber a que proteína corresponde cada secuencia)
+###(esto para saber a que proteina corresponde cada secuencia)
 
 names(shrooms_vector) <- shroom_family_df$name.new
 ### limpio espacio de trabajo
@@ -147,11 +147,11 @@ rm(shroom_family_df)
 shrooms_vector
 
 ###### ¡¡¡Muy bien!!!
-##### Ya tenemos múltiples secuencias. 
+##### Ya tenemos multiples secuencias. 
 #### ahora debemos convertirlas a un objeto StringSet
 ### que es un tipo de objeto en R 
-## para manejar múltiples secuencias de forma eficiente. 
-#### para esto corremos esta línea de comando
+## para manejar multiples secuencias de forma eficiente. 
+#### para esto corremos esta linea de comando
 
 shrooms_vector_ss <- Biostrings::AAStringSet(shrooms_vector)
 shrooms_vector_ss
@@ -159,9 +159,9 @@ shrooms_vector_ss
 ####  ahora vamos a hacer el alineamiento
 ###   y construir el arbol filogenetico.
 
-#### La funcion que utlizaremos será el 
+#### La funcion que utlizaremos sera el 
 #### MSA (Multiple Sequence Alignment)
-### Esta función se basa en el algoritmo ClustalW con R
+### Esta funcion se basa en el algoritmo ClustalW con R
 
 shrooms_align <- msa(shrooms_vector_ss,
                      method = "ClustalW")
@@ -171,10 +171,10 @@ shrooms_align
 ### analicemos el tipo de objeto que se genera
 class(shrooms_align)
 
-#### ahora Se utilizará la función msaConvert() 
+#### ahora Se utilizara la funcion msaConvert() 
 #### para ajustar el objeto msa y hacerlo compatible con
-#### funciones del paquete seqinr. Además, 
-#### se cambiará el nombre del objeto de shrooms_align 
+#### funciones del paquete seqinr. Ademas, 
+#### se cambiara el nombre del objeto de shrooms_align 
 ####   shrooms_align_seqinr.
 
 shrooms_align_seqinr <- msaConvert(shrooms_align, 
@@ -182,7 +182,7 @@ shrooms_align_seqinr <- msaConvert(shrooms_align,
 
 shrooms_align_seqinr
 
-#### noten que a pesar de esto la visualización 
+#### noten que a pesar de esto la visualizacion 
 ###  sigue siendo compleja
 
 ###########################################################
@@ -190,11 +190,11 @@ shrooms_align_seqinr
 ###########################################################
 ### primero debemos tenen un objeto del tipo 
 ### AAMultipleAlignment
-### para esto corremos la siguinte función 
+### para esto corremos la siguinte funcion 
 
 class(shrooms_align) <- "AAMultipleAlignment"
 
-### a continuación graficamos el alineamiento y lo exportamos a pdf
+### a continuacion graficamos el alineamiento y lo exportamos a pdf
 
 pdf("results/shrooms_align.pdf", width = 15, height = 15)
 ggmsa::ggmsa(shrooms_align,   # shrooms_align, NOT shrooms_align_seqinr
@@ -205,25 +205,25 @@ dev.off()
 
 
 ###Si bien un MSA es una buena manera de examinar una secuencia, 
-###es difícil evaluar visualmente toda la información. 
-##Un árbol filogenético permite resumir patrones en un MSA. 
-##La forma más rápida de crear árboles filogenéticos es 
-##resumir primero un MSA utilizando una matriz de distancia genética. 
-##Cuantos más aminoácidos sean idénticos entre sí, 
-##menor será la distancia genética entre ellos y menor será la evolución.
-##Normalmente trabajamos en términos de diferencia o 
-##distancia genética (también conocida como distancia evolutiva), 
-##aunque a menudo también hablamos de similitud 
+###es dificil evaluar visualmente toda la informacion. 
+##Un arbol filogenetico permite resumir patrones en un MSA. 
+##La forma mas rapida de crear arboles filogeneticos es 
+##resumir primero un MSA utilizando una matriz de distancia genetica. 
+##Cuantos mas aminoacidos sean identicos entre si, 
+##menor sera la distancia genetica entre ellos y menor sera la evolucion.
+##Normalmente trabajamos en terminos de diferencia o 
+##distancia genetica (tambien conocida como distancia evolutiva), 
+##aunque a menudo tambien hablamos de similitud 
 #o identidad.
 
 
-#### vamos a calcular distancia genética
+#### vamos a calcular distancia genetica
 
 shrooms_dist <- seqinr::dist.alignment(shrooms_align_seqinr, 
                                               matrix = "identity")
 class(shrooms_dist)
 
-##### por fin el arbol filogenético
+##### por fin el arbol filogenetico
 ### metodos NJ
 tree <- nj(shrooms_dist)
 
